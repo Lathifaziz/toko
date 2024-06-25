@@ -1,22 +1,21 @@
 package Enigma.TokoKu.model;
 
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "Products")
+@Table(name = "transaction")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
-
+@Builder
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

@@ -9,6 +9,9 @@ public class TokoKuApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(TokoKuApplication.class, args);
+
+
+
 	}
 
 }

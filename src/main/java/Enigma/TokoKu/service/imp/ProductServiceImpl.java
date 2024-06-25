@@ -1,11 +1,19 @@
 package Enigma.TokoKu.service.imp;
 
+import Enigma.TokoKu.model.Customer;
 import Enigma.TokoKu.model.Product;
 import Enigma.TokoKu.repository.ProductRepository;
 import Enigma.TokoKu.service.ProductService;
+import Enigma.TokoKu.utill.SearchCustomerRequest;
+import Enigma.TokoKu.utill.SearchProductRequest;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
@@ -13,8 +21,9 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
+
     @Override
-    public List<Product> getAll() {
+    public List<Product> getAll(SearchProductRequest req) {
         return productRepository.findAll();
     }
 
@@ -40,4 +49,24 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Integer id) {
         productRepository.deleteById(id);
     }
+
+    private Specification<Product> getProductSpecifikation(SearchProductRequest req){
+        return ((root, query, criteriaBuilder) -> {
+            List<Predicate> predicate = new ArrayList<>();
+            if (req.getName() != null){
+                Predicate namePredicate = criteriaBuilder.like (
+                        root.get("name"), "%"+req.getName()+"%"
+                );
+                predicate.add(namePredicate);
+            }
+            if (req .getPrice() != null) {
+                Predicate pricePredicate = criteriaBuilder.like(
+                        root.get("birthPlace"),"%"+ req.getPrice()+"%"
+                );
+                predicate.add(pricePredicate);
+            }
+            return query .where(predicate.toArray(new Predicate[]{})).getRestriction();}
+        );
+    }
+
 }
