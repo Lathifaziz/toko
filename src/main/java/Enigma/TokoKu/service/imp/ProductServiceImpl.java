@@ -1,10 +1,9 @@
 package Enigma.TokoKu.service.imp;
 
-import Enigma.TokoKu.model.Customer;
+
 import Enigma.TokoKu.model.Product;
 import Enigma.TokoKu.repository.ProductRepository;
 import Enigma.TokoKu.service.ProductService;
-import Enigma.TokoKu.utill.SearchCustomerRequest;
 import Enigma.TokoKu.utill.SearchProductRequest;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -50,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    private Specification<Product> getProductSpecifikation(SearchProductRequest req){
+    private Specification<Product> getProductSpecification(SearchProductRequest req){
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicate = new ArrayList<>();
             if (req.getName() != null){
@@ -59,13 +58,14 @@ public class ProductServiceImpl implements ProductService {
                 );
                 predicate.add(namePredicate);
             }
-            if (req .getPrice() != null) {
+            if (req .getPrice() != 0) {
                 Predicate pricePredicate = criteriaBuilder.like(
                         root.get("birthPlace"),"%"+ req.getPrice()+"%"
                 );
                 predicate.add(pricePredicate);
             }
-            return query .where(predicate.toArray(new Predicate[]{})).getRestriction();}
+            return query .where(predicate.toArray(new Predicate[]{})).getRestriction();
+        }
         );
     }
 

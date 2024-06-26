@@ -35,7 +35,7 @@ public class CustomerController {
         return customerService.getAll(req);
     }
 
-    @GetMapping("/customer")
+    @GetMapping("/custom")
     public List<CustomerProjection> getAllCustom(){
         return customerRepository.findAllProjectedBy();
     }

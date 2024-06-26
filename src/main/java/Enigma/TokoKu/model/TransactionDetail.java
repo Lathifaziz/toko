@@ -2,15 +2,14 @@ package Enigma.TokoKu.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Transaction;
 
-@Entity
 @Table(name = "transaction_detail")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
+@Entity
 public class TransactionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
