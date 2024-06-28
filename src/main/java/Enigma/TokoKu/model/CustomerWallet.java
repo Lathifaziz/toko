@@ -1,16 +1,16 @@
 package Enigma.TokoKu.model;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.*;
 
-@Entity
-@Table(name = "wallet_provider")
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class WalletProvider {
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "customers_wallet")
+public class CustomerWallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,5 +19,9 @@ public class WalletProvider {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "wallet_provider_id")
+    private WalletProvider walletProvider;
+
+    private Integer ballance;
 }

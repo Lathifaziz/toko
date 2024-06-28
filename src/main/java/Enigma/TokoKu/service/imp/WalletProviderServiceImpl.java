@@ -1,9 +1,15 @@
 package Enigma.TokoKu.service.imp;
+import Enigma.TokoKu.model.Customer;
+import Enigma.TokoKu.model.CustomerWallet;
 import Enigma.TokoKu.model.WalletProvider;
 import Enigma.TokoKu.repository.WalletProviderRepository;
+import Enigma.TokoKu.service.CustomerService;
+import Enigma.TokoKu.service.CustomerWalletService;
 import Enigma.TokoKu.service.WalletProviderService;
+import Enigma.TokoKu.utill.DTO.WalletProviderRequestDTO;
 import Enigma.TokoKu.utill.SearchWalletProviderRequest;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class WalletProviderServiceImpl implements WalletProviderService {
     private final WalletProviderRepository walletProviderRepository;
-
-    public WalletProviderServiceImpl(WalletProviderRepository walletProviderRepository){
-        this.walletProviderRepository = walletProviderRepository;
-    }
+    private final CustomerService cService;
+    private final CustomerWalletService cWService;
 
     @Override
     public List<WalletProvider> getAll(SearchWalletProviderRequest req) {
@@ -29,8 +34,20 @@ public class WalletProviderServiceImpl implements WalletProviderService {
     }
 
     @Override
-    public WalletProvider create(WalletProvider req) {
-        return walletProviderRepository.save(req);
+    public WalletProvider create(WalletProviderRequestDTO req) {
+        Customer customer = cService.getOne(req.getCustomer_id());
+
+        WalletProvider addWallet = new WalletProvider();
+        addWallet.setCustomer(customer);
+        WalletProvider addedWallet = walletProviderRepository.save(addWallet);
+
+        CustomerWallet cWallet = new CustomerWallet();
+        cWallet.setCustomer(customer);
+        cWallet.setWalletProvider(addedWallet);
+        cWallet.setBallance(req.getBallance());
+        cWService.create(cWallet);
+
+        return addedWallet;
     }
 
     @Override

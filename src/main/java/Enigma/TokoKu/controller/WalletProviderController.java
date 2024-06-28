@@ -3,24 +3,24 @@ package Enigma.TokoKu.controller;
 import Enigma.TokoKu.model.WalletProvider;
 import Enigma.TokoKu.repository.WalletProviderRepository;
 import Enigma.TokoKu.service.WalletProviderService;
+import Enigma.TokoKu.utill.DTO.WalletProviderRequestDTO;
 import Enigma.TokoKu.utill.SearchWalletProviderRequest;
 import Enigma.TokoKu.utill.WalletProviderProjection;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/wallet_provider")
+@RequiredArgsConstructor
 public class WalletProviderController {
-    public  WalletProviderController (WalletProviderService walletProviderService, WalletProviderRepository walletProviderRepository){
-        this.walletProviderRepository = walletProviderRepository;
-        this.walletProviderService = walletProviderService;
-    }
+
     private final WalletProviderRepository walletProviderRepository;
     private final WalletProviderService walletProviderService;
 
     @PostMapping
-    public WalletProvider create(@RequestBody WalletProvider req){
+    public WalletProvider create(@RequestBody WalletProviderRequestDTO req){
         return walletProviderService.create(req);
     }
     @GetMapping
